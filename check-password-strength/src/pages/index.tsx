@@ -3,9 +3,20 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 
+import { useState } from "react";
+import { checkPasswordStrength } from "@/utils";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [password, setPassword] = useState("");
+  const [strength, setStrength] = useState("");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+    setStrength(checkPasswordStrength(event.target.value));
+  };
+
   return (
     <>
       <Head>
@@ -17,6 +28,32 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.center}>
           <h1>Password Strength Checker</h1>
+          <br />
+          <br />
+          <div className={styles.inputDiv}>
+            <label>
+              Password :
+              <input type="password" value={password} onChange={handleChange} />
+            </label>
+            <br />
+            <br />
+            <p>
+              Password strength :{" "}
+              <span
+                className={
+                  strength === "Weak"
+                    ? styles.red
+                    : strength === "Medium"
+                    ? styles.yellow
+                    : strength === "Strong"
+                    ? styles.green
+                    : ""
+                }
+              >
+                {strength}
+              </span>
+            </p>
+          </div>
         </div>
       </main>
     </>
